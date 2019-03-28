@@ -65,7 +65,15 @@ class wxUserInfo
         }else{
             $url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=".$access_token."&next_openid=".$nextOpenId;
             $result = json_decode(file_get_contents($url),true);
-            $tmp = array_merge_recursive($result,$tmp);
+
+            /**
+             * PATCH $tmp 为空的时候使用 array_merge_recursive 方法会报数据类型错误
+             */
+            if ($tmp == '') {
+                $tmp = $result;
+            }else{
+                $tmp = array_merge_recursive($result,$tmp);
+            }
         }
 
         if ($result['total'] == 0 || !isset($result['total'])) {
