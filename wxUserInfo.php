@@ -179,7 +179,7 @@ class wxUserInfo
     }
 
     /**
-     * curl 使用 get 发送微信相关接口的请求，一片空白，直接访问链接有数据。有可能是对方限制了 curl 的请求
+     * curl 使用 get 发送微信相关接口的请求，使用 CURLOPT_SSL_VERIFYPEER 设置为 false 可防止 curl 请求结果一片空白
      * @param $url
      * @return mixed
      */
@@ -188,10 +188,11 @@ class wxUserInfo
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);    //设置等待时间
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);          //设置cURL允许执行的最长秒数
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);    // 是否验证对等证书
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);    // 设置等待时间
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);          // 设置cURL允许执行的最长秒数
         $res = curl_exec($ch);
         curl_close($ch);
         return $res;
